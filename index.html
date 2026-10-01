@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ===== Google Analytics (GA4) =====
+     아래 GA_ID 값을 본인의 측정 ID(G-로 시작)로 바꾸면 통계 수집이 시작됩니다. -->
+<script>
+  var GA_ID = 'G-42159J0JHR';
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  if (GA_ID.indexOf('XXXX') === -1) {
+    var gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(gaScript);
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  }
+</script>
 <title>한양대학교병원 영상의학과 CT실</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1290,7 +1305,7 @@
   window.setLang = setLang;
 
   var sel = document.getElementById('langSelect');
-  if (sel) sel.addEventListener('change', function(){ setLang(this.value); });
+  if (sel) sel.addEventListener('change', function(){ setLang(this.value); gtag('event', 'language_change', { language: this.value }); });
 
   var start = 'ko';
   try {
@@ -1299,6 +1314,27 @@
     start = q || saved || 'ko';
   } catch (e) {}
   if (start !== 'ko') setLang(start);
+
+  /* ---------- 통계 이벤트 (GA4) ---------- */
+  gtag('event', 'page_language', { language: current });
+  document.querySelectorAll('details.faq-item').forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (!d.open) return;
+      var s = d.querySelector('summary');
+      var key = s.getAttribute('data-i18n');
+      gtag('event', 'faq_open', { faq_id: key, faq_title: ORIG[key], language: current });
+    });
+  });
+  var _openExam = window.openExamModal;
+  window.openExamModal = function(key){
+    gtag('event', 'exam_sample_view', { exam: key, language: current });
+    return _openExam.apply(this, arguments);
+  };
+  var _showMap = window.showMap;
+  window.showMap = function(key){
+    gtag('event', 'map_view', { location: key, language: current });
+    return _showMap.apply(this, arguments);
+  };
 })();
 
 </script>
