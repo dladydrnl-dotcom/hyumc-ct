@@ -765,9 +765,9 @@
     .social-row.social-mobile{display:flex;margin-top:-12px;}
   }
 
-  /* 모바일: 첫 화면을 조금 더 길게 (화면 높이의 90%) */
+  /* 모바일: 첫 화면을 실제 보이는 화면 높이에 꽉 차게 (주소창·하단바 제외) */
   @media (max-width:760px){
-    .hero{min-height:calc(90vh - 44px);min-height:calc(90svh - 44px);}
+    .hero{min-height:calc(100vh - 44px);min-height:calc(100svh - 44px);}
   }
 
   /* 모바일: 하단 메뉴를 3칸 × 2줄로 반듯하게 */
@@ -793,6 +793,11 @@
     .flow{grid-template-columns:minmax(0,1fr);}
     .flow-step{grid-template-columns:36px minmax(0,1fr);}
     .flow-step .place{white-space:normal;}
+  }
+
+  /* 모바일: 첫 화면 로고를 위쪽으로 (로고와 제목 사이 간격 확대) */
+  @media (max-width:760px){
+    .hero-logo{margin-bottom:clamp(36px,8.5svh,77px);}
   }
 </style>
 </head>
@@ -2033,6 +2038,45 @@
   };
 })();
 
+</script>
+<script>
+  /* ===== 휴대폰 '뒤로가기'로 사진 창 닫기 (예시 영상 팝업 · 장소 사진 · 층별 안내도) =====
+     창을 열 때 브라우저 기록을 하나 추가해 두고, 뒤로가기를 누르면 페이지를 벗어나는 대신 창만 닫습니다. */
+  (function(){
+    var openName = null, closers = {};
+    function wrap(openFn, closeFn, name, elId, cls){
+      cls = cls || 'open';
+      var o = window[openFn], c = window[closeFn];
+      if (typeof o !== 'function' || typeof c !== 'function') return;
+      closers[name] = c;
+      window[openFn] = function(){
+        var r = o.apply(this, arguments);
+        var el = document.getElementById(elId);
+        if (el && el.classList.contains(cls) && !openName){
+          openName = name;
+          try { history.pushState({ ctModal: name }, ''); } catch (e) {}
+        }
+        return r;
+      };
+      window[closeFn] = function(){
+        var el = document.getElementById(elId);
+        if (!el || !el.classList.contains(cls)) return;
+        c.apply(this, arguments);
+        if (openName === name){
+          openName = null;
+          try { history.back(); } catch (e) {}
+        }
+      };
+    }
+    wrap('openExamModal', 'closeExamModal', 'exam', 'examModal');
+    wrap('openPlacePhoto', 'closePlacePhoto', 'photo', 'photoModal');
+    wrap('showMap', 'closeMap', 'map', 'mapBox', 'showing');
+    window.addEventListener('popstate', function(){
+      if (!openName) return;
+      var n = openName; openName = null;
+      closers[n]();
+    });
+  })();
 </script>
 </body>
 </html>
