@@ -757,6 +757,43 @@
 
   /* 준비사항 카드: 작은 휴대폰에서 좌우 여백을 줄여 문장이 어색하게 끊기지 않도록 */
   @media (max-width:400px){ .panel-row .panel{padding-left:22px;padding-right:20px;} }
+
+  /* SNS 아이콘: 모바일에서만 위치 사진 아래로 */
+  .social-row.social-mobile{display:none;}
+  @media (max-width:760px){
+    .contact-inner > div > .social-row{display:none;}
+    .social-row.social-mobile{display:flex;margin-top:-12px;}
+  }
+
+  /* 모바일: 첫 화면을 조금 더 길게 (화면 높이의 80%) */
+  @media (max-width:760px){
+    .hero{min-height:calc(80vh - 44px);min-height:calc(80svh - 44px);}
+  }
+
+  /* 모바일: 하단 메뉴를 3칸 × 2줄로 반듯하게 */
+  @media (max-width:760px){
+    .footer-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 12px;}
+    .footer-links a,.footer-links a:first-child{border-right:none;padding:9px 0;font-size:13px;}
+  }
+
+  /* 검사 당일: 조영제/비조영 선택 버튼을 '고르는 버튼'처럼 */
+  .mode-hint{text-align:center;margin:0 0 12px;font-size:15px;font-weight:400;color:var(--ink-soft);}
+  .mode-hint::after{content:"";display:inline-block;width:7px;height:7px;margin-left:8px;vertical-align:3px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg);}
+  .mode-btn{display:inline-flex;align-items:center;gap:8px;color:#48484A;}
+  .mode-btn::before{
+    content:"";flex-shrink:0;width:16px;height:16px;border-radius:50%;box-sizing:border-box;
+    border:2px solid #A1A1A6;background:#fff;transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .mode-btn:hover::before{border-color:var(--blue);}
+  .mode-btn.active::before{border-color:var(--blue);box-shadow:inset 0 0 0 3px #fff;background:var(--blue);}
+  .mode-btn{white-space:nowrap;}
+  @media (max-width:400px){ .mode-btn{padding:9px 12px;gap:6px;font-size:14px;} }
+  /* 모바일 단계 목록: 긴 외국어 단어가 화면 밖으로 넘치지 않도록 */
+  @media (max-width:900px){
+    .flow{grid-template-columns:minmax(0,1fr);}
+    .flow-step{grid-template-columns:36px minmax(0,1fr);}
+    .flow-step .place{white-space:normal;}
+  }
 </style>
 </head>
 <body>
@@ -898,7 +935,8 @@
     <p><span class="only-c" data-i18n="dayof_desc">접수부터 귀가까지, 여섯 단계로 진행됩니다.</span><span class="only-nc" data-i18n="dayof_desc_nc">접수부터 귀가까지, 다섯 단계로 진행됩니다.</span></p>
   </div>
   <div class="wrap">
-    <div class="mode-switch" role="group">
+    <p class="mode-hint" data-i18n="mode_hint">받으실 검사를 선택해 주세요</p>
+    <div class="mode-switch" role="group" aria-label="받으실 검사를 선택해 주세요">
       <button type="button" class="mode-btn active" data-mode="c" aria-pressed="true" data-i18n="mode_c">조영제 검사</button>
       <button type="button" class="mode-btn" data-mode="nc" aria-pressed="false" data-i18n="mode_nc">비조영 검사</button>
     </div>
@@ -1115,11 +1153,11 @@
       </div>
       <h2 data-i18n="contact_title">오시는 길 &amp; 문의</h2>
       <p data-i18n="contact_lead" class="lead2">검사 예약, 준비사항 등 궁금하신 점은<br>아래로 문의해 주세요.</p>
-      <div class="info-line"><b data-i18n="lbl_loc">위치</b><div class="info-val"><button data-i18n="loc_main" type="button" class="loc-btn" onclick="showMap('main')">본관 3층 영상의학과 CT실</button><button data-i18n="loc_west" type="button" class="loc-btn" onclick="showMap('west')">서관 3층 국제병원 CT실</button></div></div>
+      <div class="info-line"><b data-i18n="lbl_reg">접수</b><div class="info-val"><div class="info-place"><strong data-i18n="reg_main_h">본관 3층 영상의학과 접수</strong><small data-i18n="reg_main_d">2번 검사실 옆</small></div><div class="info-place"><strong data-i18n="reg_west_h">서관 3층 국제병원 CT실</strong><small data-i18n="reg_west_d">CT실에서 직접 접수</small></div></div></div>
       <div class="info-line"><b data-i18n="lbl_tel">전화</b><div class="info-val"><a href="tel:0222909175" class="info-link">02-2290-9175</a></div></div>
       <div class="info-line"><b data-i18n="lbl_book">예약/변경</b><div class="info-val"><a data-i18n="book_online" href="https://seoul.hyumc.com/member/login.do" target="_blank" rel="noopener" class="info-link">온라인 예약</a><a href="tel:0222909738" class="info-link">02-2290-9738</a></div></div>
       <div class="info-line"><b data-i18n="lbl_hours">운영시간</b><div class="info-val"><div data-i18n="hours_wd">평일 08:30 ~ 17:30</div><div data-i18n="hours_sat">토요일 08:30 ~ 12:30</div></div></div>
-      <div class="info-line"><b data-i18n="lbl_reg">접수</b><div class="info-val"><div class="info-place"><strong data-i18n="reg_main_h">본관 3층 영상의학과 접수</strong><small data-i18n="reg_main_d">2번 검사실 옆</small></div><div class="info-place"><strong data-i18n="reg_west_h">서관 3층 국제병원 CT실</strong><small data-i18n="reg_west_d">CT실에서 직접 접수</small></div></div></div>
+      <div class="info-line"><b data-i18n="lbl_loc">위치</b><div class="info-val"><button data-i18n="loc_main" type="button" class="loc-btn" onclick="showMap('main')">본관 3층 영상의학과 CT실</button><button data-i18n="loc_west" type="button" class="loc-btn" onclick="showMap('west')">서관 3층 국제병원 CT실</button></div></div>
       <div class="social-row">
         <a href="https://pf.kakao.com/_WxgaRu" target="_blank" rel="noopener" aria-label="카카오톡 채널" data-i18n-attr="aria-label:soc_kakao"><svg viewBox="0 0 32 32"><path d="M16 6C9.4 6 4 10.2 4 15.3c0 3.2 2.1 6 5.3 7.7-.2.9-.9 3.2-1 3.7-.1.6.2.6.5.4.2-.1 3.4-2.3 4.8-3.2.8.1 1.6.2 2.4.2 6.6 0 12-4.2 12-9.3S22.6 6 16 6z"/></svg></a>
         <a href="https://www.facebook.com/hyumc" target="_blank" rel="noopener" aria-label="페이스북" data-i18n-attr="aria-label:soc_fb"><svg viewBox="0 0 32 32"><path d="M20 11h-2.4c-.5 0-1 .6-1 1.5V15h3.4l-.5 4h-2.9v10h-4V19h-3v-4h3v-2.9c0-3 1.8-5.1 4.6-5.1H20v4z"/></svg></a>
@@ -1131,6 +1169,12 @@
       <span data-i18n="map_hint" class="map-hint" id="mapHint">위치 이름을 클릭하면<br>층별 안내도를 볼 수 있어요</span>
       <button type="button" class="map-close" id="mapClose" onclick="closeMap()" aria-label="닫기" data-i18n-attr="aria-label:close">&times;</button>
       <img id="mapImg" alt="층별 안내도" data-i18n-attr="alt:map_alt">
+    </div>
+    <div class="social-row social-mobile">
+      <a href="https://pf.kakao.com/_WxgaRu" target="_blank" rel="noopener" aria-label="카카오톡 채널" data-i18n-attr="aria-label:soc_kakao"><svg viewBox="0 0 32 32"><path d="M16 6C9.4 6 4 10.2 4 15.3c0 3.2 2.1 6 5.3 7.7-.2.9-.9 3.2-1 3.7-.1.6.2.6.5.4.2-.1 3.4-2.3 4.8-3.2.8.1 1.6.2 2.4.2 6.6 0 12-4.2 12-9.3S22.6 6 16 6z"/></svg></a>
+      <a href="https://www.facebook.com/hyumc" target="_blank" rel="noopener" aria-label="페이스북" data-i18n-attr="aria-label:soc_fb"><svg viewBox="0 0 32 32"><path d="M20 11h-2.4c-.5 0-1 .6-1 1.5V15h3.4l-.5 4h-2.9v10h-4V19h-3v-4h3v-2.9c0-3 1.8-5.1 4.6-5.1H20v4z"/></svg></a>
+      <a href="https://www.youtube.com/HYUnivMedical" target="_blank" rel="noopener" aria-label="유튜브" data-i18n-attr="aria-label:soc_yt"><svg viewBox="0 0 32 32"><rect x="3" y="9" width="26" height="14" rx="4" fill="none" stroke="#fff" stroke-width="0"/><path d="M29 12.6a3.6 3.6 0 0 0-2.5-2.6C24.4 9.5 16 9.5 16 9.5s-8.4 0-10.5.5A3.6 3.6 0 0 0 3 12.6 37 37 0 0 0 2.5 16 37 37 0 0 0 3 19.4a3.6 3.6 0 0 0 2.5 2.6c2.1.5 10.5.5 10.5.5s8.4 0 10.5-.5a3.6 3.6 0 0 0 2.5-2.6c.3-1.1.5-2.3.5-3.4a37 37 0 0 0-.5-3.4z" fill="#fff"/><path d="M13.5 19.5v-7l6 3.5-6 3.5z" fill="#3A3A3C"/></svg></a>
+      <a href="https://blog.naver.com/hyumc-pr" target="_blank" rel="noopener" aria-label="네이버 블로그" data-i18n-attr="aria-label:soc_naver"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="6" fill="none" stroke="#fff" stroke-width="2"/><text x="16" y="21" font-size="14" font-weight="700" fill="#fff" text-anchor="middle" font-family="Arial, sans-serif">b</text></svg></a>
     </div>
   </div>
 </div>
@@ -1550,7 +1594,7 @@
     dayof_desc: 'From check-in to going home, in six steps.',
     to_top: 'Back to top',
     photos_title: 'See the places in advance', photos_hint: 'Tap a photo to enlarge',
-    mode_c: 'Contrast exam', mode_nc: 'Non-contrast exam', dayof_desc_nc: 'From check-in to going home, in five steps.', skip_nc: 'Skipped for non-contrast exams', s6_h_nc: 'Going home',
+    mode_hint: 'Select the type of exam you will have', mode_c: 'Contrast exam', mode_nc: 'Non-contrast exam', dayof_desc_nc: 'From check-in to going home, in five steps.', skip_nc: 'Skipped for non-contrast exams', s6_h_nc: 'Going home',
     s1_h: 'CT check-in', s1_ul: LIS(['In order of appointment', 'After check-in, please take a seat in the waiting room. A staff member will guide you in', '!Blood draw if a kidney function check is needed']),
     place_reg_main: 'Radiology reception', place_reg_intl: 'International Hospital CT reception',
     s2_h: 'Changing', s2_ul: LIS(['Change into an exam gown']), place_changing: 'CT changing room',
@@ -1690,7 +1734,7 @@
     dayof_desc: 'От регистрации до возвращения домой — шесть этапов.',
     to_top: 'Наверх',
     photos_title: 'Как выглядят помещения', photos_hint: 'Нажмите на фото, чтобы увеличить',
-    mode_c: 'С контрастом', mode_nc: 'Без контраста', dayof_desc_nc: 'От регистрации до возвращения домой — пять этапов.', skip_nc: 'Не нужно при КТ без контраста', s6_h_nc: 'Домой',
+    mode_hint: 'Выберите тип вашего исследования', mode_c: 'С контрастом', mode_nc: 'Без контраста', dayof_desc_nc: 'От регистрации до возвращения домой — пять этапов.', skip_nc: 'Не нужно при КТ без контраста', s6_h_nc: 'Домой',
     s1_h: 'Регистрация на КТ', s1_ul: LIS(['В порядке записи', 'После регистрации подождите в зале ожидания — сотрудник пригласит вас', '!Забор крови, если нужно проверить функцию почек']),
     place_reg_main: 'Регистратура лучевой диагностики', place_reg_intl: 'Регистратура КТ Международной клиники',
     s2_h: 'Переодевание', s2_ul: LIS(['Переоденьтесь в одежду для исследования']), place_changing: 'Раздевалка КТ',
@@ -1830,7 +1874,7 @@
     dayof_desc: 'Бүртгүүлэхээс гэртээ харих хүртэл зургаан алхмаар явагдана.',
     to_top: 'Дээш буцах',
     photos_title: 'Байршлыг урьдчилан харах', photos_hint: 'Зургийг дарж томруулж харна уу',
-    mode_c: 'Тодосгогчтой', mode_nc: 'Тодосгогчгүй', dayof_desc_nc: 'Бүртгүүлэхээс гэртээ харих хүртэл таван алхмаар явагдана.', skip_nc: 'Тодосгогчгүй шинжилгээнд энэ алхам байхгүй', s6_h_nc: 'Гэртээ харих',
+    mode_hint: 'Хийлгэх шинжилгээний төрлөө сонгоно уу', mode_c: 'Тодосгогчтой', mode_nc: 'Тодосгогчгүй', dayof_desc_nc: 'Бүртгүүлэхээс гэртээ харих хүртэл таван алхмаар явагдана.', skip_nc: 'Тодосгогчгүй шинжилгээнд энэ алхам байхгүй', s6_h_nc: 'Гэртээ харих',
     s1_h: 'КТ бүртгэл', s1_ul: LIS(['Цаг захиалгын дарааллаар', 'Бүртгүүлсний дараа хүлээлгийн өрөөнд сууж байхад ажилтан таныг урьж оруулна', '!Бөөрний үйл ажиллагааг шалгах шаардлагатай бол цус авна']),
     place_reg_main: 'Дүрс оношилгооны бүртгэл', place_reg_intl: 'Олон улсын эмнэлгийн КТ бүртгэл',
     s2_h: 'Хувцас солих', s2_ul: LIS(['Шинжилгээний хувцас өмсөх']), place_changing: 'КТ хувцас солих өрөө',
